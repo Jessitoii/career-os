@@ -1,10 +1,15 @@
 import logging
+import asyncio
 from celery import shared_task
 from app.core.db import SessionLocal
 from app.models.job import JobListing
 from app.models.application import Application, ApplicationStatus
 from app.intelligence.scoring import score_job_relevance
 from app.core.state_machine import transition_state
+from app.core.blacklist import is_blacklisted
+from app.hitl.telegram_bot import send_approval_request
+from app.agents.apply_worker import apply_to_job
+# from telegram.ext import Application as TelegramApp # passed from global scope if needed
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +31,20 @@ def run_daily_session():
         # 2. Score un-scored jobs
         new_jobs = db.query(JobListing).filter(JobListing.status == 'new').limit(50).all()
         for job in new_jobs:
+            # Check blacklist proactively
+            if is_blacklisted(db, job.company_name):
+                job.status = 'rejected_blacklist'
+                db.commit()
+                continue
+
             # Sync wrapper for async scoring
-            import asyncio
-            score_result = asyncio.run(score_job_relevance("Backend Developer with Python", job.title))
+            try:
+                score_result = asyncio.run(score_job_relevance("Backend Developer with Python", job.title))
+            except Exception as e:
+                logger.error(f"Scoring failed for {job.id}: {e}")
+                job.status = 'failed_scoring'
+                db.commit()
+                continue
             
             job.relevance_score = score_result.score
             job.relevance_reasoning = score_result.reasoning
@@ -44,8 +60,22 @@ def run_daily_session():
                 
             # Note: profile_id and cv_id would be resolved properly here
             if app_status != ApplicationStatus.rejected:
-                # TODO: send telegram hitl if pending_approval
-                pass
+                # Create Application record
+                new_app = Application(
+                    job_id=job.id,
+                    status=app_status
+                )
+                db.add(new_app)
+                db.commit()
+                
+                # Dispatch execution
+                if app_status == ApplicationStatus.approved:
+                    apply_to_job.delay(str(new_app.id))
+                elif app_status == ApplicationStatus.pending_approval:
+                    # Trigger Telegram
+                    # send_approval_request(...) 
+                    # Requires passing the telegram bot application instance which is managed centrally
+                    pass
                 
         logger.info("Session complete.")
     finally:

@@ -131,14 +131,30 @@ REALISTIC_VIEWPORTS = [
 # 3. SESSION SETUP
 # ─────────────────────────────────────────────
 
-async def create_stealth_context(playwright, user_data_dir: str, headless: bool = True) -> BrowserContext:
-    """Create a stealth-patched Chromium context."""
+async def create_stealth_context(
+    playwright, 
+    user_data_dir: str, 
+    headless: bool = True,
+    slow_mo: int = 0,
+    record_video_dir: str = None,
+    platform_id: str = "default"
+) -> BrowserContext:
+    """
+    Creates an anti-detect persistent browser context.
+    Uses platform_id to isolate cookies and local storage (e.g., 'linkedin', 'workday').
+    """
+    import os
+    platform_dir = os.path.join(user_data_dir, platform_id)
+    os.makedirs(platform_dir, exist_ok=True)
+
     ua = random.choice(REALISTIC_USER_AGENTS)
     viewport = random.choice(REALISTIC_VIEWPORTS)
 
     context = await playwright.chromium.launch_persistent_context(
-        user_data_dir=user_data_dir,
+        user_data_dir=platform_dir,
         headless=headless,
+        slow_mo=slow_mo,
+        record_video_dir=record_video_dir,
         args=[
             "--disable-blink-features=AutomationControlled",
             "--disable-dev-shm-usage",

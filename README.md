@@ -220,26 +220,26 @@ scoring:
 ### Manual Start
 
 ```bash
-python -m careeros.cli start --session-mode scheduled
+python -m app.main start --session-mode scheduled
 ```
 
 ### Scheduled Execution (Cron)
 
 ```bash
 # Start every morning at 08:00
-0 8 * * 1-5 cd /path/to/career-os && python -m careeros.cli start
+0 8 * * 1-5 cd /path/to/career-os && python -m app.main start
 ```
 
 ### Scoring Only (Without Applying)
 
 ```bash
-python -m careeros.cli score --dry-run
+python -m app.main score --dry-run
 ```
 
 ### Run Pending Applications Manually
 
 ```bash
-python -m careeros.cli apply --pending-only
+python -m app.main apply --pending-only
 ```
 
 ---
@@ -354,7 +354,7 @@ SELECT * FROM cv_performance_stats;
 ```text
 career-os/
 |── docs/                  # Documents
-├── careeros/
+├── app/
 │   ├── adapters/          # ATS Adapters (Greenhouse, Lever, Workday)
 │   ├── agents/            # Scraper, Scorer, Applier, ResearchAgent
 │   ├── core/              # State machine, Celery tasks

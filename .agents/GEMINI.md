@@ -48,3 +48,4 @@ Skipping states is not allowed. Log every transition in `interaction_logs`.
 - State lifecycle: `docs/03_execution_lifecycle.md`
 - Stealth & automation: `docs/04_automation_playbook.md`
 - Prompt contracts: `docs/05_prompt_contract_library.md`
+- UI design: `docs/06_GUI.md`

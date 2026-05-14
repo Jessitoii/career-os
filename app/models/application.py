@@ -14,12 +14,18 @@ class ApplicationStatus(str, enum.Enum):
     applying = 'applying'
     applied = 'applied'
     interview = 'interview'
+    offer = 'offer'
     rejected = 'rejected'
     ghosted = 'ghosted'
     withdrawn = 'withdrawn'
-    offer = 'offer'
     pending_later = 'pending_later'
-    failed = 'failed'
+    # New rollback / error / block states
+    failed_scoring = 'failed_scoring'
+    failed_apply = 'failed_apply'
+    requires_human = 'requires_human'
+    blocked = 'blocked'
+    retry_pending = 'retry_pending'
+    rejected_blacklist = 'rejected_blacklist'
 
 class Application(Base):
     __tablename__ = 'applications'
@@ -33,6 +39,14 @@ class Application(Base):
     last_status_change = Column(DateTime(timezone=True), default=datetime.utcnow)
     rejection_reason = Column(String)
     is_manual_entry = Column(Boolean, default=False)
+    
+    # Telemetry & Audit
+    resume_strategy_used = Column(String)  # optimized, generated, master, fallback
+    resume_version = Column(String)
+    resume_hash = Column(String)
+    retry_count = Column(Integer, default=0)
+    browser_trace_path = Column(String)
+    error_screenshot_path = Column(String)
     
     applied_at = Column(DateTime(timezone=True))
     interview_date = Column(DateTime(timezone=True))

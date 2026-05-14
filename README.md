@@ -13,25 +13,6 @@
 ![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)
 ![Human In The Loop](https://img.shields.io/badge/Human--in--the--Loop-Web_GUI_&_Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)
 
-# 🤖 Career OS — Autonomous Job Application Agent
-
-<div align="center">
-
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-7.2-DC382D?style=for-the-badge&logo=redis&logoColor=white)
-![Playwright](https://img.shields.io/badge/Playwright-1.44-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
-![Celery](https://img.shields.io/badge/Celery-5.4-37814A?style=for-the-badge&logo=celery&logoColor=white)
-
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)
-![Human In The Loop](https://img.shields.io/badge/Human--in--the--Loop-Web_GUI_&_Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)
-
-**Wake up in the morning and your applications are already submitted.**
-
-Smart filtering · Anti-bot Stealth · Web GUI & Telegram Approval · Multi-ATS Support
-
 </div>
 
 ---
